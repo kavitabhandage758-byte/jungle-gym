@@ -1,2 +1,634 @@
 # jungle-gym
 For building GYM websites for the clients which is professional and authentic eyecatchy website 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jungle Gym | Unleash Your Inner Beast | Gadag</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --neon-green: #39FF14;
+            --neon-orange: #FF6600;
+            --bg-dark: #050505;
+            --bg-card: rgba(20, 20, 20, 0.8);
+            --text-main: #ffffff;
+            --text-dim: #b0b0b0;
+            --glass: rgba(255, 255, 255, 0.05);
+            --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* --- Canvas Layer --- */
+        #bgCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at center, #111 0%, #050505 100%);
+        }
+
+        /* --- Components --- */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        h1, h2, h3, .bebas {
+            font-family: 'Bebas Neue', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 14px 32px;
+            font-weight: 800;
+            text-transform: uppercase;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: var(--transition);
+            cursor: pointer;
+            border: none;
+            gap: 10px;
+        }
+
+        .btn-neon {
+            background: var(--neon-green);
+            color: #000;
+            box-shadow: 0 0 20px rgba(57, 255, 20, 0.4);
+        }
+
+        .btn-neon:hover {
+            box-shadow: 0 0 35px var(--neon-green);
+            transform: translateY(-3px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: #fff;
+            border: 2px solid #fff;
+        }
+
+        .btn-outline:hover {
+            background: #fff;
+            color: #000;
+        }
+
+        /* --- Header --- */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px 0;
+            z-index: 1000;
+            background: rgba(5, 5, 5, 0.85);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--glass);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 2rem;
+            color: var(--neon-green);
+            font-weight: 800;
+        }
+
+        .logo span { color: var(--neon-orange); }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #fff;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover { color: var(--neon-green); }
+
+        /* --- Hero Section --- */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(0deg, rgba(5,5,5,1) 0%, rgba(5,5,5,0.4) 50%, rgba(5,5,5,0.8) 100%),
+                        url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=2070&auto=format&fit=crop') center/cover no-repeat;
+            z-index: -1;
+            opacity: 0.7;
+        }
+
+        .hero-content h1 {
+            font-size: clamp(3rem, 10vw, 7rem);
+            line-height: 0.9;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 30px rgba(57, 255, 20, 0.3));
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            color: var(--text-dim);
+            margin-bottom: 40px;
+            max-width: 600px;
+            margin-inline: auto;
+        }
+
+        .hero-btns {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        /* --- Gemini AI Sections --- */
+        .ai-tools {
+            padding: 100px 0;
+            background: linear-gradient(180deg, #050505 0%, #0a0a0a 100%);
+        }
+
+        .ai-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+            margin-top: 50px;
+        }
+
+        .ai-card {
+            background: var(--bg-card);
+            border: 1px solid var(--neon-green);
+            padding: 40px;
+            border-radius: 20px;
+            position: relative;
+            transition: var(--transition);
+        }
+
+        .ai-card:hover {
+            box-shadow: 0 0 30px rgba(57, 255, 20, 0.2);
+        }
+
+        .ai-card select, .ai-card input {
+            width: 100%;
+            padding: 12px;
+            margin: 15px 0;
+            background: #111;
+            border: 1px solid #333;
+            color: #fff;
+            border-radius: 5px;
+        }
+
+        .ai-response {
+            margin-top: 25px;
+            padding: 20px;
+            background: rgba(0,0,0,0.5);
+            border-radius: 10px;
+            font-size: 0.9rem;
+            max-height: 300px;
+            overflow-y: auto;
+            white-space: pre-line;
+            display: none;
+            border-left: 3px solid var(--neon-green);
+        }
+
+        .loading-spinner {
+            display: none;
+            margin: 10px auto;
+            border: 3px solid rgba(255,255,255,0.1);
+            border-radius: 50%;
+            border-top: 3px solid var(--neon-green);
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .voice-btn {
+            background: var(--neon-orange);
+            color: #000;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.7rem;
+            cursor: pointer;
+            margin-top: 10px;
+            display: none;
+            text-transform: uppercase;
+            font-weight: 800;
+        }
+
+        /* --- Sections --- */
+        .stats { padding: 60px 0; background: var(--neon-orange); color: #000; }
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); text-align: center; }
+        .stat-item h3 { font-size: 3.5rem; }
+        .about { padding: 100px 0; }
+        .section-header { text-align: center; margin-bottom: 60px; }
+        .section-header h2 { font-size: 3rem; margin-bottom: 10px; color: var(--neon-green); }
+        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; }
+        .card { background: var(--bg-card); padding: 40px; border-radius: 12px; border: 1px solid var(--glass); text-align: center; }
+        .pricing { padding: 100px 0; background: rgba(10,10,10,0.5); }
+        .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+        .price-card { background: var(--bg-card); padding: 50px 30px; border-radius: 15px; border: 1px solid var(--glass); text-align: center; }
+        .price-card.featured { border: 2px solid var(--neon-orange); transform: scale(1.05); position: relative; }
+        .price-value { font-size: 3rem; font-weight: 800; margin-bottom: 25px; color: var(--neon-green); }
+        .bmi-section { padding: 80px 0; }
+        .bmi-box { background: linear-gradient(135deg, #111 0%, #000 100%); padding: 50px; border-radius: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 50px; border: 1px solid var(--glass); }
+        #bmi-score { font-size: 5rem; font-family: 'Bebas Neue'; color: var(--neon-green); }
+        .contact { padding: 100px 0; }
+        .contact-wrapper { display: grid; grid-template-columns: 1fr 1.5fr; gap: 40px; }
+        footer { padding: 60px 0; background: #000; text-align: center; }
+
+        /* Animation Classes */
+        [data-reveal] { opacity: 0; transform: translateY(30px); transition: 0.8s ease-out; }
+        .revealed { opacity: 1; transform: translateY(0); }
+
+        @media (max-width: 768px) {
+            .ai-grid { grid-template-columns: 1fr; }
+            .bmi-box { grid-template-columns: 1fr; }
+            .stats-grid { grid-template-columns: 1fr; gap: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="bgCanvas"></canvas>
+
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">JUNGLE<span>GYM</span></div>
+                <div class="nav-links">
+                    <a href="#about">About</a>
+                    <a href="#ai-tools">✨ AI Coach</a>
+                    <a href="#membership">Plans</a>
+                    <a href="#location">Location</a>
+                </div>
+                <a href="https://wa.me/917411112438" class="btn btn-neon" style="padding: 8px 15px; font-size: 0.8rem;">
+                    <i class="fab fa-whatsapp"></i> Chat Now
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="hero-overlay"></div>
+        <div class="container hero-content">
+            <h1 class="bebas">Unleash Your<br><span style="color: var(--neon-green);">Inner Beast</span></h1>
+            <p>Experience the future of fitness in Gadag. Now powered by ✨ Gemini AI to personalize your transformation.</p>
+            <div class="hero-btns">
+                <a href="#ai-tools" class="btn btn-neon">Try AI Coach ✨</a>
+                <a href="tel:+917411112438" class="btn btn-outline"><i class="fas fa-phone"></i> +91 74111 12438</a>
+            </div>
+        </div>
+    </section>
+
+    <div class="stats">
+        <div class="container stats-grid">
+            <div class="stat-item" data-reveal>
+                <h3 class="bebas" data-count="1000">0</h3>
+                <p>Members</p>
+            </div>
+            <div class="stat-item" data-reveal>
+                <h3 class="bebas" data-count="5">0</h3>
+                <p>Years</p>
+            </div>
+            <div class="stat-item" data-reveal>
+                <h3 class="bebas" data-count="10">0</h3>
+                <p>Trainers</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ✨ AI TOOLS SECTION ✨ -->
+    <section id="ai-tools" class="ai-tools">
+        <div class="container">
+            <div class="section-header" data-reveal>
+                <h2>✨ AI Fitness Evolution</h2>
+                <p>Use the power of Gemini AI to accelerate your results. Instant routines and diets.</p>
+            </div>
+
+            <div class="ai-grid">
+                <!-- AI Workout Generator -->
+                <div class="ai-card" data-reveal>
+                    <h3 class="bebas" style="color: var(--neon-green); font-size: 2rem;">✨ Workout Generator</h3>
+                    <p style="font-size: 0.8rem; color: var(--text-dim);">Get a scientifically-backed routine in seconds.</p>
+                    
+                    <select id="workout-goal">
+                        <option value="Muscle Gain">Muscle Gain</option>
+                        <option value="Fat Loss">Fat Loss</option>
+                        <option value="Athletic Performance">Athletic Performance</option>
+                        <option value="Strength">Powerlifting/Strength</option>
+                    </select>
+
+                    <select id="workout-level">
+                        <option value="Beginner">Beginner</option>
+                        <option value="Intermediate">Intermediate</option>
+                        <option value="Advanced Beast">Advanced Beast</option>
+                    </select>
+
+                    <button class="btn btn-neon" style="width: 100%;" onclick="generateWorkout()">✨ Generate Routine</button>
+                    <div id="workout-loading" class="loading-spinner"></div>
+                    <div id="workout-result" class="ai-response"></div>
+                    <div id="workout-voice-btn" class="voice-btn" onclick="speakResponse('workout-result')"><i class="fas fa-volume-up"></i> Listen to Plan</div>
+                </div>
+
+                <!-- AI Diet Planner -->
+                <div class="ai-card" data-reveal>
+                    <h3 class="bebas" style="color: var(--neon-orange); font-size: 2rem;">✨ Meal Planner</h3>
+                    <p style="font-size: 0.8rem; color: var(--text-dim);">Fuel your beast with AI-crafted nutrition.</p>
+                    
+                    <input type="number" id="diet-weight" placeholder="Your Weight (kg)">
+                    <select id="diet-pref">
+                        <option value="High Protein Non-Veg">High Protein (Non-Veg)</option>
+                        <option value="High Protein Vegetarian">High Protein (Indian Veg)</option>
+                        <option value="Keto/Low Carb">Keto / Low Carb</option>
+                    </select>
+
+                    <button class="btn btn-neon" style="width: 100%; background: var(--neon-orange);" onclick="generateDiet()">✨ Generate Diet</button>
+                    <div id="diet-loading" class="loading-spinner"></div>
+                    <div id="diet-result" class="ai-response"></div>
+                    <div id="diet-voice-btn" class="voice-btn" onclick="speakResponse('diet-result')"><i class="fas fa-volume-up"></i> Listen to Diet</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="about">
+        <div class="container">
+            <div class="section-header" data-reveal>
+                <h2>Premium Services</h2>
+                <p>Professional fitness center serving Veereswara Nagar with world-class facilities.</p>
+            </div>
+            <div class="services-grid">
+                <div class="card" data-reveal>
+                    <i class="fas fa-dumbbell" style="font-size: 2rem; color: var(--neon-green); margin-bottom: 15px;"></i>
+                    <h3 class="bebas">Strength Training</h3>
+                    <p>High-end racks, olympic plates, and free weights for maximum gains.</p>
+                </div>
+                <div class="card" data-reveal>
+                    <i class="fas fa-heartbeat" style="font-size: 2rem; color: var(--neon-green); margin-bottom: 15px;"></i>
+                    <h3 class="bebas">Cardio Zone</h3>
+                    <p>Advanced treadmills and endurance machines for heart health.</p>
+                </div>
+                <div class="card" data-reveal>
+                    <i class="fas fa-weight" style="font-size: 2rem; color: var(--neon-green); margin-bottom: 15px;"></i>
+                    <h3 class="bebas">Weight Loss</h3>
+                    <p>Specialized programs designed to shed kilos and build confidence.</p>
+                </div>
+                <div class="card" data-reveal>
+                    <i class="fas fa-user-ninja" style="font-size: 2rem; color: var(--neon-green); margin-bottom: 15px;"></i>
+                    <h3 class="bebas">Personal Training</h3>
+                    <p>One-on-one sessions with Gadag's most certified fitness experts.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="membership" class="pricing">
+        <div class="container">
+            <div class="section-header" data-reveal>
+                <h2>Choose Your Plan</h2>
+            </div>
+            <div class="pricing-grid">
+                <div class="price-card" data-reveal>
+                    <h3 class="bebas">Basic</h3>
+                    <div class="price-value">₹999<span>/mo</span></div>
+                    <ul style="list-style: none; margin-bottom: 30px; text-align: left; padding-left: 20px;">
+                        <li><i class="fas fa-check" style="color: var(--neon-green);"></i> Gym Access</li>
+                        <li><i class="fas fa-check" style="color: var(--neon-green);"></i> Locker Room</li>
+                    </ul>
+                    <a href="tel:+917411112438" class="btn btn-outline" style="width: 100%;">Select</a>
+                </div>
+                <div class="price-card featured" data-reveal>
+                    <h3 class="bebas">Premium</h3>
+                    <div class="price-value">₹1,999<span>/mo</span></div>
+                    <ul style="list-style: none; margin-bottom: 30px; text-align: left; padding-left: 20px;">
+                        <li><i class="fas fa-check" style="color: var(--neon-green);"></i> 24/7 Access</li>
+                        <li><i class="fas fa-check" style="color: var(--neon-green);"></i> ✨ AI Coach Pro</li>
+                        <li><i class="fas fa-check" style="color: var(--neon-green);"></i> Personal Trainer</li>
+                    </ul>
+                    <a href="tel:+917411112438" class="btn btn-neon" style="width: 100%;">Get Started</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="bmi" class="bmi-section">
+        <div class="container">
+            <div class="bmi-box" data-reveal>
+                <div class="bmi-inputs">
+                    <h2 class="bebas" style="font-size: 2.5rem; margin-bottom: 20px;">BMI Calculator</h2>
+                    <div style="margin-bottom: 15px;"><input type="number" id="weight" placeholder="Weight (kg)" style="width: 100%; padding: 12px; background: #111; border: 1px solid #333; color: #fff;"></div>
+                    <div style="margin-bottom: 20px;"><input type="number" id="height" placeholder="Height (cm)" style="width: 100%; padding: 12px; background: #111; border: 1px solid #333; color: #fff;"></div>
+                    <button class="btn btn-neon" onclick="calculateBMI()" style="width: 100%;">Calculate</button>
+                </div>
+                <div style="text-align: center; display: flex; flex-direction: column; justify-content: center;">
+                    <div id="bmi-score">00.0</div>
+                    <p id="bmi-status" style="text-transform: uppercase; letter-spacing: 2px;">Ready for Analysis</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="location" class="contact">
+        <div class="container">
+            <div class="contact-wrapper">
+                <div class="contact-info" data-reveal>
+                    <h3 class="bebas" style="font-size: 2.5rem; margin-bottom: 20px;">Location</h3>
+                    <p>Mulgund Road, Veereswara Nagar, Gadag 582103</p>
+                    <br>
+                    <p><i class="fas fa-phone"></i> +91 74111 12438</p>
+                    <br>
+                    <a href="https://maps.google.com" target="_blank" class="btn btn-neon">Open Maps</a>
+                </div>
+                <div style="height: 350px; border-radius: 20px; overflow: hidden; border: 1px solid var(--glass);" data-reveal>
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15386.99268383214!2d75.6176!3d15.424!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bb8f8680197d191%3A0xc3c948943715c0e0!2sGadag-Betageri%2C%20Karnataka!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="logo">JUNGLE<span>GYM</span></div>
+            <p style="margin-top: 15px; color: var(--text-dim);">&copy; 2026 Jungle Gym Gadag. Powered by ✨ Gemini AI.</p>
+        </div>
+    </footer>
+
+    <script>
+        const apiKey = ""; // API Key provided by environment
+
+        // --- Gemini AI Functions ---
+        async function callGemini(prompt) {
+            try {
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: prompt }] }],
+                        systemInstruction: { parts: [{ text: "You are the AI Head Coach for Jungle Gym. Your tone is motivating, professional, and intense. Focus on high-intensity training and protein-rich diets." }] }
+                    })
+                });
+                const data = await response.json();
+                return data.candidates?.[0]?.content?.parts?.[0]?.text || "Coach is recharging. Try again!";
+            } catch (error) {
+                console.error(error);
+                return "Error connecting to AI Coach. Keep training!";
+            }
+        }
+
+        async function generateWorkout() {
+            const goal = document.getElementById('workout-goal').value;
+            const level = document.getElementById('workout-level').value;
+            const res = document.getElementById('workout-result');
+            const loader = document.getElementById('workout-loading');
+            const vBtn = document.getElementById('workout-voice-btn');
+
+            loader.style.display = 'block'; res.style.display = 'none'; vBtn.style.display = 'none';
+
+            const prompt = `Generate a 4-exercise high-intensity workout for ${level} level focused on ${goal}. Include sets, reps, and a quick tip.`;
+            const output = await callGemini(prompt);
+
+            loader.style.display = 'none'; res.style.display = 'block'; res.innerText = output; vBtn.style.display = 'inline-block';
+        }
+
+        async function generateDiet() {
+            const weight = document.getElementById('diet-weight').value || "70";
+            const pref = document.getElementById('diet-pref').value;
+            const res = document.getElementById('diet-result');
+            const loader = document.getElementById('diet-loading');
+            const vBtn = document.getElementById('diet-voice-btn');
+
+            loader.style.display = 'block'; res.style.display = 'none'; vBtn.style.display = 'none';
+
+            const prompt = `Create a 1-day high-protein meal plan for a ${weight}kg person with preference for ${pref}. Keep it brief.`;
+            const output = await callGemini(prompt);
+
+            loader.style.display = 'none'; res.style.display = 'block'; res.innerText = output; vBtn.style.display = 'inline-block';
+        }
+
+        async function speakResponse(divId) {
+            const text = document.getElementById(divId).innerText;
+            const btn = event.target.closest('.voice-btn');
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
+
+            try {
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${apiKey}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: `Say in a deep, powerful, motivating gym coach voice: ${text}` }] }],
+                        generationConfig: {
+                            responseModalities: ["AUDIO"],
+                            speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: "Puck" } } }
+                        }
+                    })
+                });
+                const data = await response.json();
+                const pcmData = data.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
+                if (pcmData) {
+                    const audio = new Audio(`data:audio/l16;base64,${pcmData}`);
+                    audio.play();
+                }
+            } catch (e) { console.error(e); } finally { btn.innerHTML = '<i class="fas fa-volume-up"></i> Listen to Plan'; }
+        }
+
+        // --- Visual Effects ---
+        const canvas = document.getElementById('bgCanvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        function initCanvas() {
+            canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+            particles = Array(60).fill().map(() => ({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                size: Math.random() * 2,
+                vx: (Math.random() - 0.5) * 0.5,
+                vy: (Math.random() - 0.5) * 0.5
+            }));
+        }
+        function draw() {
+            ctx.clearRect(0,0,canvas.width,canvas.height);
+            ctx.fillStyle = 'rgba(57, 255, 20, 0.2)';
+            particles.forEach(p => {
+                ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI*2); ctx.fill();
+                p.x += p.vx; p.y += p.vy;
+                if(p.x < 0) p.x = canvas.width; if(p.x > canvas.width) p.x = 0;
+                if(p.y < 0) p.y = canvas.height; if(p.y > canvas.height) p.y = 0;
+            });
+            requestAnimationFrame(draw);
+        }
+        initCanvas(); draw(); window.onresize = initCanvas;
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(e => {
+                if(e.isIntersecting) {
+                    e.target.classList.add('revealed');
+                    const c = e.target.querySelector('[data-count]');
+                    if(c) {
+                        let val = 0; const target = +c.getAttribute('data-count');
+                        const itv = setInterval(() => {
+                            val += Math.ceil(target/50);
+                            if(val >= target) { c.innerText = target + "+"; clearInterval(itv); }
+                            else c.innerText = val + "+";
+                        }, 30);
+                    }
+                }
+            });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('[data-reveal]').forEach(el => observer.observe(el));
+
+        function calculateBMI() {
+            const w = document.getElementById('weight').value;
+            const h = document.getElementById('height').value / 100;
+            if(w && h) {
+                const bmi = (w / (h * h)).toFixed(1);
+                document.getElementById('bmi-score').innerText = bmi;
+                document.getElementById('bmi-status').innerText = bmi < 25 ? "Lean Beast" : "Heavy Hitter";
+            }
+        }
+    </script>
+</body>
+</html>
